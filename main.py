@@ -1,5 +1,7 @@
 import pygame
-from tkinter import simpledialog
+from tkinter import simpledialog, messagebox
+from ast import literal_eval
+from os import remove
 
 pygame.init()
 
@@ -42,6 +44,29 @@ while running:
             star_name = font.render(f"{item}", True, white)
             screen.blit(star_name, position)
             pygame.draw.circle(screen, white, position, 5)
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_F10:
+            archive = open("db.txt", "a")
+            archive.write(str(stars))
+            archive.close()
+            messagebox.showinfo("Space Marker", "Points saved in the database")
+        elif event. type == pygame.KEYDOWN and event.key == pygame.K_F11:
+            archive = open("db.txt", "r")
+            stars = literal_eval(archive.read())
+            for names, coordinates in stars.items():
+                star_name = font.render(f"{names}", True, white)
+                screen.blit(star_name, coordinates)
+                pygame.draw.circle(screen, white, coordinates, 5)
+            archive.close()
+            messagebox.showinfo("Space Marker", "Points loaded from the database")
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_F12:
+            remove("db.txt")
+            stars = {}
+            screen.fill(white)
+            screen.blit(background, (0,0))
+            screen.blit(f10, (10,10))
+            screen.blit(f11, (10,30))
+            screen.blit(f12, (10,50))
+            messagebox.showinfo("Space Marker", "Points deleted from the database")
 
 
     pygame.display.update()
