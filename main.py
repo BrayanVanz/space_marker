@@ -45,19 +45,25 @@ while running:
             screen.blit(star_name, position)
             pygame.draw.circle(screen, white, position, 5)
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_F10:
-            archive = open("db.txt", "a")
-            archive.write(str(stars))
-            archive.close()
-            messagebox.showinfo("Space Marker", "Points saved in the database")
+            if len(stars) > 0:
+                archive = open("db.txt", "w")
+                archive.write(str(stars))
+                archive.close()
+                messagebox.showinfo("Space Marker", "Points saved in the database")
+            else:
+                messagebox.showwarning("Space Marker", "There are no points to be saved")
         elif event. type == pygame.KEYDOWN and event.key == pygame.K_F11:
-            archive = open("db.txt", "r")
-            stars = literal_eval(archive.read())
-            for names, coordinates in stars.items():
-                star_name = font.render(f"{names}", True, white)
-                screen.blit(star_name, coordinates)
-                pygame.draw.circle(screen, white, coordinates, 5)
-            archive.close()
-            messagebox.showinfo("Space Marker", "Points loaded from the database")
+            try:
+                archive = open("db.txt", "r")
+                stars = literal_eval(archive.read())
+                for names, coordinates in stars.items():
+                    star_name = font.render(f"{names}", True, white)
+                    screen.blit(star_name, coordinates)
+                    pygame.draw.circle(screen, white, coordinates, 5)
+                archive.close()
+                messagebox.showinfo("Space Marker", "Points loaded from the database")
+            except:
+                messagebox.showwarning("Space Marker", "There are no points to load")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_F12:
             remove("db.txt")
             stars = {}
