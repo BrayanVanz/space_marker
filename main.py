@@ -2,6 +2,7 @@ import pygame
 from tkinter import simpledialog, messagebox
 from ast import literal_eval
 from os import remove
+from math import sqrt
 
 pygame.init()
 
@@ -32,8 +33,18 @@ pygame.mixer.music.play(-1)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            if len(stars) > 0:
+                archive = open("db.txt", "w")
+                archive.write(str(stars))
+                archive.close()
+                messagebox.showinfo("Space Marker", "Points saved in the database")
             running = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if len(stars) > 0:
+                archive = open("db.txt", "w")
+                archive.write(str(stars))
+                archive.close()
+                messagebox.showinfo("Space Marker", "Points saved in the database")
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             position = pygame.mouse.get_pos()
@@ -73,6 +84,20 @@ while running:
             screen.blit(f11, (10,30))
             screen.blit(f12, (10,50))
             messagebox.showinfo("Space Marker", "Points deleted from the database")
+    
+    if len(stars) > 1:
+        key_list = list(stars.keys())
+
+        for i, v in enumerate(key_list):
+            try:
+                x1, y1 = stars[key_list[i]]
+                x2, y2 = stars[key_list[i + 1]]
+                distance = round(sqrt((x2 - x1)**2 + (y2 - y1)**2))
+                write_distance = font.render(f"{distance}", True, white)
+                pygame.draw.line(screen, white, (x1, y1), (x2, y2), 1)
+                screen.blit(write_distance, ((x1 + x2)/2, (y1 + y2)/2))
+            except:
+                break
 
 
     pygame.display.update()
